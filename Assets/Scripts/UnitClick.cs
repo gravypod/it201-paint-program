@@ -12,13 +12,16 @@ public class UnitClick : MonoBehaviour
     private const float TimedDestroyDelay = 3.0f;
     private const float PaintDrawDistance = 50.0f;
     public Text mousePositionText;
-    
+
     private GameObject CreateRandomizedPaintObject(
         Vector3 point,
         GameObject template,
         float minRed, float maxRed,
         float minGreen, float maxGreen,
-        float minBlue, float maxBlue
+        float minBlue, float maxBlue,
+        float minXScale, float maxXScale,
+        float minYScale, float maxYScale,
+        float minZScale, float maxZScale
     )
     {
         var color = new Color(
@@ -27,8 +30,17 @@ public class UnitClick : MonoBehaviour
             Random.Range(minBlue, maxBlue)
         );
         var entity = Instantiate(template, point, Quaternion.identity);
+
         var mesh = entity.GetComponent<MeshRenderer>();
         mesh.material.color = color;
+
+        var tran = entity.GetComponent<Transform>();
+        tran.localScale = new Vector3(
+            Random.Range(minXScale, maxXScale),
+            Random.Range(minYScale, maxYScale),
+            Random.Range(minZScale, maxZScale)
+        );
+
         return entity;
     }
 
@@ -68,9 +80,9 @@ public class UnitClick : MonoBehaviour
         var point = Physics.Raycast(ray, out hit, PaintDrawDistance, LayerMask.NameToLayer("UI"))
             ? hit.point
             : ray.GetPoint(PaintDrawDistance);
-        
+
         Debug.DrawRay(ray.origin, point, Color.white);
-        
+
         DrawAt(point);
     }
 
@@ -80,12 +92,18 @@ public class UnitClick : MonoBehaviour
         var unit = canvas.GetComponent<UnitUi>();
         var rgbColorRange = unit.GetColorMaximums();
 
+        var scaleRange = unit.GetSizeMaximums();
+        var minScales = new float[] {0.0001f, 0.0001f, 0.0001f};
+
         var paintObject = CreateRandomizedPaintObject(
             point,
             unit.GetPaintObjectTemplate(),
             0, rgbColorRange[0],
             0, rgbColorRange[1],
-            0, rgbColorRange[2]
+            0, rgbColorRange[2],
+            minScales[0], scaleRange[0] + minScales[0],
+            minScales[1], scaleRange[1] + minScales[1],
+            minScales[2], scaleRange[2] + minScales[2]
         );
 
         if (unit.IsTimedDestroyEnabled())
