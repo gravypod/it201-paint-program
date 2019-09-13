@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using Object = System.Object;
 using Random = UnityEngine.Random;
 
@@ -10,7 +11,8 @@ public class UnitClick : MonoBehaviour
 {
     private const float TimedDestroyDelay = 3.0f;
     private const float PaintDrawDistance = 50.0f;
-
+    public Text mousePositionText;
+    
     private GameObject CreateRandomizedPaintObject(
         Vector3 point,
         GameObject template,
@@ -40,13 +42,16 @@ public class UnitClick : MonoBehaviour
     private void Update()
     {
         var c = GetComponent<Camera>();
-        var ray = c.ScreenPointToRay(Input.mousePosition);
+        var mouse = Input.mousePosition;
+        var ray = c.ScreenPointToRay(mouse);
 
         if (Input.GetMouseButtonDown(1))
             UpdateErase(ray);
 
         if (Input.GetMouseButtonDown(0))
             UpdateDraw(ray);
+
+        mousePositionText.text = string.Format("Mouse Position: x {0}, y: {1}", mouse.x, mouse.y);
     }
 
     private void UpdateErase(Ray ray)
