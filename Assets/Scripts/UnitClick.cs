@@ -10,7 +10,6 @@ public class UnitClick : MonoBehaviour
 {
     private const float TimedDestroyDelay = 3.0f;
     private const float PaintDrawDistance = 50.0f;
-    public GameObject paintBlobTemplate;
 
     private GameObject CreateRandomizedPaintObject(
         Vector3 point,
@@ -78,7 +77,7 @@ public class UnitClick : MonoBehaviour
 
         var paintObject = CreateRandomizedPaintObject(
             point,
-            paintBlobTemplate,
+            unit.GetPaintObjectTemplate(),
             0, rgbColorRange[0],
             0, rgbColorRange[1],
             0, rgbColorRange[2]
