@@ -34,13 +34,11 @@ public class UnitClick : MonoBehaviour
         RaycastHit hit;
         if (!Physics.Raycast(ray, out hit, PAINT_DRAW_DISTANCE + 10))
             return;
-        Debug.Log("Deleting colleded");
         Destroy(hit.collider.gameObject);
     }
 
     private void UpdateDraw(Ray ray)
     {
-        Debug.Log("UpdateDraw");
         RaycastHit hit;
 
         // Assu
@@ -48,6 +46,8 @@ public class UnitClick : MonoBehaviour
             ? hit.point
             : ray.GetPoint(PAINT_DRAW_DISTANCE);
 
-        Instantiate(this.paintBlobTemplate, point, Quaternion.identity);
+        var entity = Instantiate(this.paintBlobTemplate, point, Quaternion.identity);
+        var mesh = entity.GetComponent<MeshRenderer>();
+        mesh.material.color = Color.black;
     }
 }
