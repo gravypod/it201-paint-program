@@ -8,7 +8,8 @@ using Random = UnityEngine.Random;
 
 public class UnitClick : MonoBehaviour
 {
-    private const float PaintDrawDistance = 20.0f;
+    private const float TimedDestroyDelay = 3.0f;
+    private const float PaintDrawDistance = 50.0f;
     public GameObject paintBlobTemplate;
 
     private GameObject CreateRandomizedPaintObject(
@@ -60,9 +61,12 @@ public class UnitClick : MonoBehaviour
     private void UpdateDraw(Ray ray)
     {
         RaycastHit hit;
-        var point = Physics.Raycast(ray, out hit, PaintDrawDistance)
+        var point = Physics.Raycast(ray, out hit, PaintDrawDistance, LayerMask.NameToLayer("UI"))
             ? hit.point
             : ray.GetPoint(PaintDrawDistance);
+        
+        Debug.DrawRay(ray.origin, point, Color.white);
+        
         DrawAt(point);
     }
 
@@ -72,12 +76,15 @@ public class UnitClick : MonoBehaviour
         var unit = canvas.GetComponent<UnitUi>();
         var rgbColorRange = unit.GetColorMaximums();
 
-        CreateRandomizedPaintObject(
+        var paintObject = CreateRandomizedPaintObject(
             point,
             paintBlobTemplate,
             0, rgbColorRange[0],
             0, rgbColorRange[1],
             0, rgbColorRange[2]
         );
+
+        if (unit.IsTimedDestroyEnabled())
+            Destroy(paintObject, TimedDestroyDelay);
     }
 }

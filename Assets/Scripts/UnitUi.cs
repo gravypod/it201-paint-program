@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UnitUi : MonoBehaviour
 {
+    public Toggle timedDestroyToggle;
     public Slider redSlider, greenSlider, blueSlider;
 
     // Use this for initialization
@@ -30,6 +31,11 @@ public class UnitUi : MonoBehaviour
             greenSlider.normalizedValue,
             blueSlider.normalizedValue
         };
+    }
+
+    public bool IsTimedDestroyEnabled()
+    {
+        return timedDestroyToggle.isOn;
     }
 
     public void OnClearPressed()
