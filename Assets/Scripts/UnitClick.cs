@@ -4,11 +4,31 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using Object = System.Object;
+using Random = UnityEngine.Random;
 
 public class UnitClick : MonoBehaviour
 {
+    private const float PaintDrawDistance = 20.0f;
     public GameObject paintBlobTemplate;
-    const float PAINT_DRAW_DISTANCE = 20.0f;
+
+    private GameObject CreateRandomizedPaintObject(
+        Vector3 point,
+        GameObject template,
+        float minRed, float maxRed,
+        float minGreen, float maxGreen,
+        float minBlue, float maxBlue
+    )
+    {
+        var color = new Color(
+            Random.Range(minRed, maxRed),
+            Random.Range(minGreen, maxGreen),
+            Random.Range(minBlue, maxBlue)
+        );
+        var entity = Instantiate(template, point, Quaternion.identity);
+        var mesh = entity.GetComponent<MeshRenderer>();
+        mesh.material.color = color;
+        return entity;
+    }
 
     // Use this for initialization
     private void Start()
@@ -32,7 +52,7 @@ public class UnitClick : MonoBehaviour
     private void UpdateErase(Ray ray)
     {
         RaycastHit hit;
-        if (!Physics.Raycast(ray, out hit, PAINT_DRAW_DISTANCE + 10))
+        if (!Physics.Raycast(ray, out hit, PaintDrawDistance + 10))
             return;
         Destroy(hit.collider.gameObject);
     }
@@ -42,12 +62,16 @@ public class UnitClick : MonoBehaviour
         RaycastHit hit;
 
         // Assu
-        var point = Physics.Raycast(ray, out hit, PAINT_DRAW_DISTANCE)
+        var point = Physics.Raycast(ray, out hit, PaintDrawDistance)
             ? hit.point
-            : ray.GetPoint(PAINT_DRAW_DISTANCE);
+            : ray.GetPoint(PaintDrawDistance);
 
-        var entity = Instantiate(this.paintBlobTemplate, point, Quaternion.identity);
-        var mesh = entity.GetComponent<MeshRenderer>();
-        mesh.material.color = Color.black;
+        CreateRandomizedPaintObject(
+            point,
+            paintBlobTemplate,
+            0, 1,
+            0, 1,
+            0, 1
+        );
     }
 }
