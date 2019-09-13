@@ -60,18 +60,24 @@ public class UnitClick : MonoBehaviour
     private void UpdateDraw(Ray ray)
     {
         RaycastHit hit;
-
-        // Assu
         var point = Physics.Raycast(ray, out hit, PaintDrawDistance)
             ? hit.point
             : ray.GetPoint(PaintDrawDistance);
+        DrawAt(point);
+    }
+
+    private void DrawAt(Vector3 point)
+    {
+        var canvas = GameObject.FindObjectOfType<Canvas>();
+        var unit = canvas.GetComponent<UnitUi>();
+        var rgbColorRange = unit.GetColorMaximums();
 
         CreateRandomizedPaintObject(
             point,
             paintBlobTemplate,
-            0, 1,
-            0, 1,
-            0, 1
+            0, rgbColorRange[0],
+            0, rgbColorRange[1],
+            0, rgbColorRange[2]
         );
     }
 }
