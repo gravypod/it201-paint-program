@@ -14,7 +14,7 @@ public class UnitUi : MonoBehaviour
     }
 
     public Toggle timedDestroyToggle;
-    public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider;
+    public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider, emissionSlider;
 
     public Dropdown paintObjectDropdown;
     public GameObject spherePaintObjectTemplate, cubePaintObjectTemplate, cylinderPaintObjectTemplate;
@@ -86,6 +86,11 @@ public class UnitUi : MonoBehaviour
         return alphaSlider.value;
     }
 
+    public float GetGlow()
+    {
+        return emissionSlider.value;
+    }
+    
     public float[] GetSizeMaximums()
     {
         var value = scaleSlider.value;

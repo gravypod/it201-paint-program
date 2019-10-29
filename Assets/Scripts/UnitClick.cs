@@ -16,7 +16,7 @@ public class UnitClick : MonoBehaviour
     private GameObject CreateRandomizedPaintObject(
         Vector3 point,
         GameObject template,
-        float alpha,
+        float alpha, float glow,
         float minRed, float maxRed,
         float minGreen, float maxGreen,
         float minBlue, float maxBlue,
@@ -35,6 +35,10 @@ public class UnitClick : MonoBehaviour
 
         var mesh = entity.GetComponent<MeshRenderer>();
         mesh.material.color = color;
+
+        // Magic from unity forum
+        mesh.material.EnableKeyword("_EMISSION");
+        mesh.material.SetColor("_EmissionColor", new Color(1.0f, 1.0f, 1.0f, 1.0f) * glow);
 
         var tran = entity.GetComponent<Transform>();
         tran.localScale = new Vector3(
@@ -96,12 +100,13 @@ public class UnitClick : MonoBehaviour
 
         var scaleRange = unit.GetSizeMaximums();
         var alpha = unit.GetAlpha();
+        var glow = unit.GetGlow();
         var minScales = new float[] {0.0001f, 0.0001f, 0.0001f};
 
         var paintObject = CreateRandomizedPaintObject(
             point,
             unit.GetPaintObjectTemplate(),
-            alpha,
+            alpha, glow,
             0, rgbColorRange[0],
             0, rgbColorRange[1],
             0, rgbColorRange[2],
