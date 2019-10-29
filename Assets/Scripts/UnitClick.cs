@@ -16,6 +16,7 @@ public class UnitClick : MonoBehaviour
     private GameObject CreateRandomizedPaintObject(
         Vector3 point,
         GameObject template,
+        float alpha,
         float minRed, float maxRed,
         float minGreen, float maxGreen,
         float minBlue, float maxBlue,
@@ -27,7 +28,8 @@ public class UnitClick : MonoBehaviour
         var color = new Color(
             Random.Range(minRed, maxRed),
             Random.Range(minGreen, maxGreen),
-            Random.Range(minBlue, maxBlue)
+            Random.Range(minBlue, maxBlue),
+            alpha
         );
         var entity = Instantiate(template, point, Quaternion.identity);
 
@@ -93,11 +95,13 @@ public class UnitClick : MonoBehaviour
         var rgbColorRange = unit.GetColorMaximums();
 
         var scaleRange = unit.GetSizeMaximums();
+        var alpha = unit.GetAlpha();
         var minScales = new float[] {0.0001f, 0.0001f, 0.0001f};
 
         var paintObject = CreateRandomizedPaintObject(
             point,
             unit.GetPaintObjectTemplate(),
+            alpha,
             0, rgbColorRange[0],
             0, rgbColorRange[1],
             0, rgbColorRange[2],
