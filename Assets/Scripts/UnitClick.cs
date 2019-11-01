@@ -94,8 +94,12 @@ public class UnitClick : MonoBehaviour
 
     private void DrawAt(Vector3 point)
     {
-        var canvas = GameObject.FindObjectOfType<Canvas>();
+        var canvas = FindObjectOfType<Canvas>();
         var unit = canvas.GetComponent<UnitUi>();
+
+        if (unit == null)
+            return;
+        
         var rgbColorRange = unit.GetColorMaximums();
 
         var scaleRange = unit.GetSizeMaximums();
