@@ -17,7 +17,9 @@ public class UnitUi : MonoBehaviour
     public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider, emissionSlider;
 
     public Dropdown paintObjectDropdown;
-    public GameObject spherePaintObjectTemplate, cubePaintObjectTemplate, cylinderPaintObjectTemplate;
+    public GameObject spherePaintObjectTemplate;
+    public GameObject cubePaintObjectTemplate;
+    public GameObject cylinderPaintObjectTemplate;
 
     // Use this for initialization
     void Start()
@@ -51,6 +53,7 @@ public class UnitUi : MonoBehaviour
         }
         else
         {
+            Debug.Log(text);
             type = (PaintObjectType) Enum.Parse(typeof(PaintObjectType), text);
         }
 
@@ -90,7 +93,7 @@ public class UnitUi : MonoBehaviour
     {
         return emissionSlider.value;
     }
-    
+
     public float[] GetSizeMaximums()
     {
         var value = scaleSlider.value;

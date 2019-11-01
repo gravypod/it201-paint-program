@@ -32,11 +32,15 @@ public class PointAtCenter : MonoBehaviour
         var gameTime = GameObject.Find("Time").GetComponent<TimeManager>().gameTime;
         float secondsIntoDay = (float) gameTime.TimeOfDay.TotalSeconds;
         var secondsInFullDay = 24 * 60 * 60;
-        var rotation = ((secondsIntoDay / secondsInFullDay) * 360f) + offsetToCorrectRotation;
+
+        var percentIntoDay = (secondsIntoDay / secondsInFullDay) - 0.5f;
+        
+        float xRot = Mathf.Lerp(0f,360f,percentIntoDay);
+
         var center = new Vector3(320, 0, 0);
         
         CopyTransform(copyOfOriginal, sunTransform);
-        sunTransform.RotateAround(center, new Vector3(1, 0, 0), rotation);
+        sunTransform.RotateAround(center, new Vector3(1, 0, 0), xRot);
         sunTransform.LookAt(center);
     }
 }
