@@ -11,6 +11,7 @@ public class UnitClick : MonoBehaviour
 {
     private const float TimedDestroyDelay = 3.0f;
     private const float PaintDrawDistance = 50.0f;
+    public GameObject camera;
     public Text mousePositionText;
 
     private GameObject CreateRandomizedPaintObject(
@@ -59,7 +60,7 @@ public class UnitClick : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        var c = GetComponent<Camera>();
+        var c = camera.GetComponent<Camera>();
         var mouse = Input.mousePosition;
         var ray = c.ScreenPointToRay(mouse);
 
