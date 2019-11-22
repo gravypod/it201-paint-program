@@ -6840,6 +6840,12 @@ MonoBehaviour:
     type: 2}
   cylinderPaintObjectTemplate: {fileID: 1381354254944906, guid: 187e29d5f85af41dba42c4cb93cfad44,
     type: 2}
+  sphereCubePaintObjectTemplate: {fileID: 1123475270782836, guid: feb91b3236d0b4e97a9978cf4fd0d12c,
+    type: 2}
+  cubeCylinderPaintObjectTemplate: {fileID: 1435619860318514, guid: 482f9a9d41e4b4929be16691a0aafa79,
+    type: 2}
+  cylinderCylinderPaintObjectTemplate: {fileID: 1533870259423644, guid: 7fe131be5db3b4fd98c0f00b926eb1be,
+    type: 2}
 --- !u!114 &1847216185
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -19,12 +19,12 @@ public class Puppet : MonoBehaviour
         _animations = GetComponentsInChildren<Animation>();
     }
 
-    void ConfigureSingleAnimation(Animation a)
+    void ConfigureSingleAnimation(MotionStyle s, UnitUi.PaintObjectType t, Animation a)
     {
-        switch (style)
+        switch (s)
         {
             case MotionStyle.Scale:
-                switch (type)
+                switch (t)
                 {
                     case UnitUi.PaintObjectType.Sphere:
                         a.sourceScaleX = Animation.MotionSource.Cosine;
@@ -51,7 +51,7 @@ public class Puppet : MonoBehaviour
 
                 break;
             case MotionStyle.Position:
-                switch (type)
+                switch (t)
                 {
                     case UnitUi.PaintObjectType.Sphere:
                         a.sourceX = Animation.MotionSource.Sine;
@@ -72,9 +72,10 @@ public class Puppet : MonoBehaviour
                         Debug.Log("Unsuported ConfigureSingleAnimation /w Position");
                         break;
                 }
+
                 break;
             case MotionStyle.Rotation:
-                switch (type)
+                switch (t)
                 {
                     case UnitUi.PaintObjectType.Sphere:
                         a.sourceRotationX = Animation.MotionSource.Sine;
@@ -98,6 +99,78 @@ public class Puppet : MonoBehaviour
                         Debug.Log("Unsuported ConfigureSingleAnimation /w Position");
                         break;
                 }
+
+                break;
+        }
+    }
+
+    void ConfigureMultiAnimation(Animation a, Animation b)
+    {
+        switch (style)
+        {
+            case MotionStyle.Scale:
+                switch (type)
+                {
+                    case UnitUi.PaintObjectType.SphereCube:
+                        ConfigureSingleAnimation(style, UnitUi.PaintObjectType.Sphere, a);
+                        ConfigureSingleAnimation(MotionStyle.Rotation, UnitUi.PaintObjectType.Cube, b);
+                        break;
+                    case UnitUi.PaintObjectType.CubeCylinder:
+                        ConfigureSingleAnimation(style, UnitUi.PaintObjectType.Cube, a);
+                        ConfigureSingleAnimation(MotionStyle.Position, UnitUi.PaintObjectType.Cylinder, b);
+                        break;
+                    case UnitUi.PaintObjectType.CylinderCylinder:
+                        ConfigureSingleAnimation(MotionStyle.Rotation, UnitUi.PaintObjectType.Cylinder, a);
+                        ConfigureSingleAnimation(style, UnitUi.PaintObjectType.Cylinder, b);
+                        break;
+                    default:
+                        Debug.Log("Unsuported ConfigureMultiAnimation /w Scale");
+                        break;
+                }
+
+                break;
+            case MotionStyle.Position:
+                switch (type)
+                {
+                    case UnitUi.PaintObjectType.SphereCube:
+                        ConfigureSingleAnimation(style, UnitUi.PaintObjectType.Sphere, a);
+                        ConfigureSingleAnimation(MotionStyle.Scale, UnitUi.PaintObjectType.Cube, b);
+                        break;
+                    case UnitUi.PaintObjectType.CubeCylinder:
+                        ConfigureSingleAnimation(MotionStyle.Position, UnitUi.PaintObjectType.Cube, a);
+                        ConfigureSingleAnimation(style, UnitUi.PaintObjectType.Cylinder, b);
+                        break;
+                    case UnitUi.PaintObjectType.CylinderCylinder:
+                        ConfigureSingleAnimation(MotionStyle.Rotation, UnitUi.PaintObjectType.Cylinder, a);
+                        ConfigureSingleAnimation(style, UnitUi.PaintObjectType.Cylinder, b);
+                        break;
+                    default:
+                        Debug.Log("Unsuported ConfigureMultiAnimation /w Position");
+                        break;
+                }
+
+                break;
+            case MotionStyle.Rotation:
+                switch (type)
+                {
+                    case UnitUi.PaintObjectType.SphereCube:
+                        ConfigureSingleAnimation(MotionStyle.Rotation, UnitUi.PaintObjectType.Sphere, a);
+                        ConfigureSingleAnimation(style, UnitUi.PaintObjectType.Cube, b);
+                        break;
+                    case UnitUi.PaintObjectType.CubeCylinder:
+                        ConfigureSingleAnimation(MotionStyle.Position, UnitUi.PaintObjectType.Cube, a);
+                        ConfigureSingleAnimation(style, UnitUi.PaintObjectType.Cylinder, b);
+                        break;
+                    case UnitUi.PaintObjectType.CylinderCylinder:
+                        ConfigureSingleAnimation(MotionStyle.Scale, UnitUi.PaintObjectType.Cylinder, a);
+                        ConfigureSingleAnimation(style, UnitUi.PaintObjectType.Cylinder, b);
+                        ConfigureSingleAnimation(MotionStyle.Position, UnitUi.PaintObjectType.Cylinder, b);
+                        break;
+                    default:
+                        Debug.Log("Unsuported ConfigureMultiAnimation /w Position");
+                        break;
+                }
+
                 break;
         }
     }
@@ -110,7 +183,12 @@ public class Puppet : MonoBehaviour
             case UnitUi.PaintObjectType.Cube:
             case UnitUi.PaintObjectType.Cylinder:
             case UnitUi.PaintObjectType.Sphere:
-                ConfigureSingleAnimation(_animations[0]);
+                ConfigureSingleAnimation(style, type, _animations[0]);
+                break;
+            case UnitUi.PaintObjectType.SphereCube:
+            case UnitUi.PaintObjectType.CubeCylinder:
+            case UnitUi.PaintObjectType.CylinderCylinder:
+                ConfigureMultiAnimation(_animations[0], _animations[1]);
                 break;
             default:
                 Debug.Log("Unknown object placed");

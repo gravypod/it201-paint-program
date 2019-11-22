@@ -11,7 +11,10 @@ public class UnitUi : MonoBehaviour
     {
         Sphere,
         Cube,
-        Cylinder
+        Cylinder,
+        SphereCube,
+        CubeCylinder,
+        CylinderCylinder,
     }
 
     public Toggle timedDestroyToggle;
@@ -23,6 +26,9 @@ public class UnitUi : MonoBehaviour
     public GameObject spherePaintObjectTemplate;
     public GameObject cubePaintObjectTemplate;
     public GameObject cylinderPaintObjectTemplate;
+    public GameObject sphereCubePaintObjectTemplate;
+    public GameObject cubeCylinderPaintObjectTemplate;
+    public GameObject cylinderCylinderPaintObjectTemplate;
 
     // Use this for initialization
     void Start()
@@ -68,6 +74,12 @@ public class UnitUi : MonoBehaviour
                 return cubePaintObjectTemplate;
             case PaintObjectType.Cylinder:
                 return cylinderPaintObjectTemplate;
+            case PaintObjectType.SphereCube:
+                return sphereCubePaintObjectTemplate;
+            case PaintObjectType.CubeCylinder:
+                return cubeCylinderPaintObjectTemplate;
+            case PaintObjectType.CylinderCylinder:
+                return cylinderCylinderPaintObjectTemplate;
             default:
                 throw new ArgumentOutOfRangeException();
         }
