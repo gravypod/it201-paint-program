@@ -24,18 +24,80 @@ public class Puppet : MonoBehaviour
         switch (style)
         {
             case MotionStyle.Scale:
-                a.sourceScaleX = Animation.MotionSource.Cosine;
-                a.sourceScaleY = Animation.MotionSource.Cosine;
-                a.sourceScaleZ = Animation.MotionSource.Cosine;
+                switch (type)
+                {
+                    case UnitUi.PaintObjectType.Sphere:
+                        a.sourceScaleX = Animation.MotionSource.Cosine;
+                        a.sourceScaleY = Animation.MotionSource.Cosine;
+                        a.sourceScaleZ = Animation.MotionSource.Cosine;
+                        a.speed = 0.5f;
+                        break;
+                    case UnitUi.PaintObjectType.Cube:
+                        a.sourceScaleX = Animation.MotionSource.Sine;
+                        a.sourceScaleY = Animation.MotionSource.Cosine;
+                        a.sourceScaleZ = Animation.MotionSource.Sine;
+                        a.speed = 3;
+                        break;
+                    case UnitUi.PaintObjectType.Cylinder:
+                        a.sourceScaleX = Animation.MotionSource.Sine;
+                        a.sourceScaleY = Animation.MotionSource.Sine;
+                        a.sourceScaleZ = Animation.MotionSource.Sine;
+                        a.speed = 1.5f;
+                        break;
+                    default:
+                        Debug.Log("Unsuported ConfigureSingleAnimation /w Scale");
+                        break;
+                }
+
                 break;
             case MotionStyle.Position:
-                a.sourceX = Animation.MotionSource.Cosine;
-                a.sourceY = Animation.MotionSource.Sine;
+                switch (type)
+                {
+                    case UnitUi.PaintObjectType.Sphere:
+                        a.sourceX = Animation.MotionSource.Sine;
+                        a.sourceY = Animation.MotionSource.Cosine;
+                        a.speed = 2f;
+                        break;
+                    case UnitUi.PaintObjectType.Cube:
+                        a.sourceX = Animation.MotionSource.Cosine;
+                        a.sourceY = Animation.MotionSource.Cosine;
+                        a.speed = 1f;
+                        break;
+                    case UnitUi.PaintObjectType.Cylinder:
+                        a.sourceX = Animation.MotionSource.Cosine;
+                        a.sourceY = Animation.MotionSource.Sine;
+                        a.speed = 0.5f;
+                        break;
+                    default:
+                        Debug.Log("Unsuported ConfigureSingleAnimation /w Position");
+                        break;
+                }
                 break;
             case MotionStyle.Rotation:
-                a.sourceRotationX = Animation.MotionSource.Sine;
-                a.sourceRotationY = Animation.MotionSource.Cosine;
-                a.sourceRotationZ = Animation.MotionSource.Sine;
+                switch (type)
+                {
+                    case UnitUi.PaintObjectType.Sphere:
+                        a.sourceRotationX = Animation.MotionSource.Sine;
+                        a.sourceRotationY = Animation.MotionSource.Cosine;
+                        a.sourceRotationZ = Animation.MotionSource.Sine;
+                        a.speed = 10f;
+                        break;
+                    case UnitUi.PaintObjectType.Cube:
+                        a.sourceRotationX = Animation.MotionSource.Tangent;
+                        a.sourceRotationY = Animation.MotionSource.Sine;
+                        a.sourceRotationZ = Animation.MotionSource.Sine;
+                        a.speed = 1f;
+                        break;
+                    case UnitUi.PaintObjectType.Cylinder:
+                        a.sourceRotationX = Animation.MotionSource.Cosine;
+                        a.sourceRotationY = Animation.MotionSource.Sine;
+                        a.sourceRotationZ = Animation.MotionSource.Cosine;
+                        a.speed = 1f;
+                        break;
+                    default:
+                        Debug.Log("Unsuported ConfigureSingleAnimation /w Position");
+                        break;
+                }
                 break;
         }
     }

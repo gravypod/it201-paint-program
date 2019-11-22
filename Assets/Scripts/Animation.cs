@@ -23,6 +23,8 @@ public class Animation : MonoBehaviour
         sourceRotationY = MotionSource.None,
         sourceRotationZ = MotionSource.None;
 
+    public GameObject applyChangesTo = null;
+    
     public float speed = 1;
 
     private Quaternion rotationStart;
@@ -30,7 +32,7 @@ public class Animation : MonoBehaviour
     private Vector4 colorStart;
     private Vector3 scaleStart;
     private float time = 0.0f, sine = 0.0f, cosine = 0.0f, tangent = 0.0f;
-
+    
 
     private float GetValue(MotionSource s)
     {
@@ -50,10 +52,13 @@ public class Animation : MonoBehaviour
 
     private void Start()
     {
-        positionStart = transform.localPosition;
-        scaleStart = transform.localScale;
-        colorStart = GetComponent<MeshRenderer>().material.color;
-        rotationStart = transform.localRotation;
+        if (applyChangesTo == null)
+            applyChangesTo = gameObject;
+
+        positionStart = applyChangesTo.transform.localPosition;
+        scaleStart = applyChangesTo.transform.localScale;
+        colorStart = applyChangesTo.GetComponent<MeshRenderer>().material.color;
+        rotationStart = applyChangesTo.transform.localRotation;
     }
 
     Vector4 ColorChange()
@@ -83,14 +88,14 @@ public class Animation : MonoBehaviour
 
         if (sourceRotationX != MotionSource.None || sourceRotationY != MotionSource.None ||
             sourceRotationZ != MotionSource.None)
-            transform.eulerAngles = rot;
+            applyChangesTo.transform.rotation = Quaternion.Euler(rot);
 
         if (sourceScaleX != MotionSource.None || sourceScaleY != MotionSource.None ||
             sourceScaleZ != MotionSource.None)
-            transform.localScale = scaleStart + scale;
+            applyChangesTo.transform.localScale = scaleStart + scale;
 
         if (sourceX != MotionSource.None || sourceY != MotionSource.None ||
             sourceZ != MotionSource.None)
-            transform.localPosition = positionStart + pos;
+            applyChangesTo.transform.localPosition = positionStart + pos;
     }
 }

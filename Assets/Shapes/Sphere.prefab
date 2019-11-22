@@ -135,6 +135,7 @@ MonoBehaviour:
   sourceRotationX: 0
   sourceRotationY: 0
   sourceRotationZ: 0
+  applyChangesTo: {fileID: 1916889105440704}
   speed: 1
 --- !u!114 &114993731917343516
 MonoBehaviour:
