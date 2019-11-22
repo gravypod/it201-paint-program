@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = System.Random;
 
 public class UnitUi : MonoBehaviour
 {
-    private enum PaintObjectType
+    public enum PaintObjectType
     {
         Sphere,
         Cube,
@@ -15,6 +16,8 @@ public class UnitUi : MonoBehaviour
 
     public Toggle timedDestroyToggle;
     public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider, emissionSlider;
+
+    public Dropdown animationSelection;
 
     public Dropdown paintObjectDropdown;
     public GameObject spherePaintObjectTemplate;
@@ -112,6 +115,25 @@ public class UnitUi : MonoBehaviour
         foreach (var paintObject in GameObject.FindGameObjectsWithTag("PaintObject"))
         {
             Destroy(paintObject);
+        }
+    }
+
+    public void ConfigureAnimationSettings(Puppet puppet)
+    {
+        switch (animationSelection.options[animationSelection.value].text)
+        {
+            case "Position":
+                puppet.style = Puppet.MotionStyle.Position;
+                break;
+            case "Rotation":
+                puppet.style = Puppet.MotionStyle.Rotation;
+                break;
+            case "Scale":
+                puppet.style = Puppet.MotionStyle.Scale;
+                break;
+            default:
+                Debug.Log("ERROR: Unknown animation selected");
+                break;
         }
     }
 }

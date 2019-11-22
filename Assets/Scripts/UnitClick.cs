@@ -34,12 +34,15 @@ public class UnitClick : MonoBehaviour
         );
         var entity = Instantiate(template, point, Quaternion.identity);
 
-        var mesh = entity.GetComponent<MeshRenderer>();
-        mesh.material.color = color;
+        foreach (MeshRenderer mesh in entity.GetComponentsInChildren<MeshRenderer>())
+        {
+            mesh.material.color = color;
 
-        // Magic from unity forum
-        mesh.material.EnableKeyword("_EMISSION");
-        mesh.material.SetColor("_EmissionColor", new Color(1.0f, 1.0f, 1.0f, 1.0f) * glow);
+            // Magic from unity forum
+            mesh.material.EnableKeyword("_EMISSION");
+            mesh.material.SetColor("_EmissionColor", new Color(1.0f, 1.0f, 1.0f, 1.0f) * glow);
+        }
+
 
         var tran = entity.GetComponent<Transform>();
         tran.localScale = new Vector3(
@@ -100,7 +103,7 @@ public class UnitClick : MonoBehaviour
 
         if (unit == null)
             return;
-        
+
         var rgbColorRange = unit.GetColorMaximums();
 
         var scaleRange = unit.GetSizeMaximums();
@@ -120,6 +123,11 @@ public class UnitClick : MonoBehaviour
             minScales[2], scaleRange[2] + minScales[2]
         );
 
+        var puppet = paintObject.GetComponent<Puppet>();
+        if (puppet != null)
+            unit.ConfigureAnimationSettings(puppet);
+        else
+            Debug.Log("No animation");
         if (unit.IsTimedDestroyEnabled())
             Destroy(paintObject, TimedDestroyDelay);
     }
