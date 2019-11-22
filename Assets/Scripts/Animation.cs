@@ -57,7 +57,7 @@ public class Animation : MonoBehaviour
 
         positionStart = applyChangesTo.transform.localPosition;
         scaleStart = applyChangesTo.transform.localScale;
-        colorStart = applyChangesTo.GetComponent<MeshRenderer>().material.color;
+        //colorStart = applyChangesTo.GetComponent<MeshRenderer>().material.color;
         rotationStart = applyChangesTo.transform.localRotation;
     }
 

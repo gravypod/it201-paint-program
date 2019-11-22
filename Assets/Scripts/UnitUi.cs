@@ -17,8 +17,8 @@ public class UnitUi : MonoBehaviour
         CylinderCylinder,
     }
 
-    public Toggle timedDestroyToggle;
-    public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider, emissionSlider;
+    public Toggle timedDestroyToggle, animationRandomizeToggle;
+    public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider, emissionSlider, animationSlider;
 
     public Dropdown animationSelection;
 
@@ -132,7 +132,14 @@ public class UnitUi : MonoBehaviour
 
     public void ConfigureAnimationSettings(Puppet puppet)
     {
-        switch (animationSelection.options[animationSelection.value].text)
+        int selectedOption = animationSelection.value;
+
+        if (animationRandomizeToggle.isOn)
+        {
+            selectedOption = UnityEngine.Random.Range(0, animationSelection.options.Count);
+        }
+
+        switch (animationSelection.options[selectedOption].text)
         {
             case "Position":
                 puppet.style = Puppet.MotionStyle.Position;
@@ -146,6 +153,12 @@ public class UnitUi : MonoBehaviour
             default:
                 Debug.Log("ERROR: Unknown animation selected");
                 break;
+        }
+
+
+        foreach (Animation animation in puppet.GetComponentsInChildren<Animation>())
+        {
+            animation.speed = animationSlider.value;
         }
     }
 }
