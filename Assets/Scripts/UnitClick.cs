@@ -22,7 +22,7 @@ public class UnitClick : MonoBehaviour
 
     private bool CanDraw()
     {
-        if (unit.IsPaintBrushMode())
+        if (unit.IsRapidFire())
         {
             return Input.GetMouseButton(0);
         }

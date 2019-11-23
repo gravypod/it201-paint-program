@@ -17,7 +17,7 @@ public class UnitUi : MonoBehaviour
         CylinderCylinder,
     }
 
-    public Toggle timedDestroyToggle, animationRandomizeToggle, paintBrushMode;
+    public Toggle timedDestroyToggle, animationRandomizeToggle, paintBrushMode, rapidFire;
     public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider, emissionSlider, animationSlider;
 
     public Dropdown animationSelection;
@@ -123,6 +123,11 @@ public class UnitUi : MonoBehaviour
     public bool IsPaintBrushMode()
     {
         return paintBrushMode.isOn;
+    }
+
+    public bool IsRapidFire()
+    {
+        return rapidFire.isOn;
     }
 
     public void OnClearPressed()
