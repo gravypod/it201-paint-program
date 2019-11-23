@@ -17,7 +17,7 @@ public class UnitUi : MonoBehaviour
         CylinderCylinder,
     }
 
-    public Toggle timedDestroyToggle, animationRandomizeToggle;
+    public Toggle timedDestroyToggle, animationRandomizeToggle, paintBrushMode;
     public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider, emissionSlider, animationSlider;
 
     public Dropdown animationSelection;
@@ -118,6 +118,11 @@ public class UnitUi : MonoBehaviour
     public bool IsTimedDestroyEnabled()
     {
         return timedDestroyToggle.isOn;
+    }
+
+    public bool IsPaintBrushMode()
+    {
+        return paintBrushMode.isOn;
     }
 
     public void OnClearPressed()

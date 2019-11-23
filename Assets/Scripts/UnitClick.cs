@@ -14,6 +14,23 @@ public class UnitClick : MonoBehaviour
     public GameObject camera;
     public Text mousePositionText;
 
+    private UnitUi unit;
+    private Canvas canvas;
+
+    private bool drawScheduled, removeScheduled;
+
+    private bool CanDraw()
+    {
+        if (unit.IsPaintBrushMode())
+        {
+            return Input.GetMouseButton(0);
+        }
+        else
+        {
+            return Input.GetMouseButtonDown(0);
+        }
+    }
+
     private GameObject CreateRandomizedPaintObject(
         Vector3 point,
         GameObject template,
@@ -58,21 +75,34 @@ public class UnitClick : MonoBehaviour
     private void Start()
     {
         Debug.Log("Starting UnitClick");
+        canvas = FindObjectOfType<Canvas>();
+        unit = canvas.GetComponent<UnitUi>();
+    }
+
+    private void Update()
+    {
+        if (!drawScheduled)
+            drawScheduled = CanDraw();
+
+        if (!removeScheduled)
+            removeScheduled = Input.GetMouseButtonDown(1);
     }
 
     // Update is called once per frame
-    private void Update()
+    private void FixedUpdate()
     {
         var c = camera.GetComponent<Camera>();
         var mouse = Input.mousePosition;
         var ray = c.ScreenPointToRay(mouse);
 
-        if (Input.GetMouseButtonDown(1))
+        if (removeScheduled)
             UpdateErase(ray);
 
-        if (Input.GetMouseButtonDown(0))
+        if (drawScheduled)
             UpdateDraw(ray);
 
+        // Clear queued schedules
+        drawScheduled = removeScheduled = false;
         mousePositionText.text = string.Format("Mouse Position: x {0}, y: {1}", mouse.x, mouse.y);
     }
 
@@ -86,24 +116,23 @@ public class UnitClick : MonoBehaviour
 
     private void UpdateDraw(Ray ray)
     {
-        RaycastHit hit;
-        var point = Physics.Raycast(ray, out hit, PaintDrawDistance, LayerMask.NameToLayer("UI"))
-            ? hit.point
-            : ray.GetPoint(PaintDrawDistance);
+        var point = ray.GetPoint(PaintDrawDistance);
 
-        Debug.DrawRay(ray.origin, point, Color.white);
+        if (!unit.IsPaintBrushMode())
+        {
+            // If we are not in paint brush mode, raytrace and test physical collisions
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, PaintDrawDistance, LayerMask.NameToLayer("UI")))
+            {
+                point = hit.point;
+            }
+        }
 
         DrawAt(point);
     }
 
     private void DrawAt(Vector3 point)
     {
-        var canvas = FindObjectOfType<Canvas>();
-        var unit = canvas.GetComponent<UnitUi>();
-
-        if (unit == null)
-            return;
-
         var rgbColorRange = unit.GetColorMaximums();
 
         var scaleRange = unit.GetSizeMaximums();
