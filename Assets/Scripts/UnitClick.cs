@@ -16,6 +16,7 @@ public class UnitClick : MonoBehaviour
 
     private UnitUi unit;
     private Canvas canvas;
+    private Vector3 mousePosition = Vector3.one;
 
     private bool drawScheduled, removeScheduled;
 
@@ -102,6 +103,7 @@ public class UnitClick : MonoBehaviour
             UpdateDraw(ray);
 
         // Clear queued schedules
+        mousePosition = Input.mousePosition;
         drawScheduled = removeScheduled = false;
         mousePositionText.text = string.Format("Mouse Position: x {0}, y: {1}", mouse.x, mouse.y);
     }
@@ -139,6 +141,20 @@ public class UnitClick : MonoBehaviour
         var alpha = unit.GetAlpha();
         var glow = unit.GetGlow();
         var minScales = new float[] {0.0001f, 0.0001f, 0.0001f};
+
+        if (unit.IsPaintBrushMode())
+        {
+            var diff = (Input.mousePosition - mousePosition).normalized;
+            
+            scaleRange = new[]
+            {
+                0.0f, 0.0f, 0.0f
+            };
+            minScales = new[]
+            {
+                diff.x, diff.y, 1.0f,
+            };
+        }
 
         var paintObject = CreateRandomizedPaintObject(
             point,
