@@ -3,23 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = System.Random;
 
 public class UnitUi : MonoBehaviour
 {
-    private enum PaintObjectType
+    public enum PaintObjectType
     {
         Sphere,
         Cube,
-        Cylinder
+        Cylinder,
+        SphereCube,
+        CubeCylinder,
+        CylinderCylinder,
     }
 
-    public Toggle timedDestroyToggle;
-    public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider, emissionSlider;
+    public Toggle timedDestroyToggle, animationRandomizeToggle, paintBrushMode, rapidFire;
+    public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider, emissionSlider, animationSlider, maxDistanceSlider;
+
+    public Dropdown animationSelection;
 
     public Dropdown paintObjectDropdown;
     public GameObject spherePaintObjectTemplate;
     public GameObject cubePaintObjectTemplate;
     public GameObject cylinderPaintObjectTemplate;
+    public GameObject sphereCubePaintObjectTemplate;
+    public GameObject cubeCylinderPaintObjectTemplate;
+    public GameObject cylinderCylinderPaintObjectTemplate;
 
     // Use this for initialization
     void Start()
@@ -65,6 +74,12 @@ public class UnitUi : MonoBehaviour
                 return cubePaintObjectTemplate;
             case PaintObjectType.Cylinder:
                 return cylinderPaintObjectTemplate;
+            case PaintObjectType.SphereCube:
+                return sphereCubePaintObjectTemplate;
+            case PaintObjectType.CubeCylinder:
+                return cubeCylinderPaintObjectTemplate;
+            case PaintObjectType.CylinderCylinder:
+                return cylinderCylinderPaintObjectTemplate;
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -84,6 +99,11 @@ public class UnitUi : MonoBehaviour
         };
     }
 
+    public float MaxDistance()
+    {
+        return maxDistanceSlider.value;
+    }
+    
     public float GetAlpha()
     {
         return alphaSlider.value;
@@ -105,6 +125,16 @@ public class UnitUi : MonoBehaviour
         return timedDestroyToggle.isOn;
     }
 
+    public bool IsPaintBrushMode()
+    {
+        return paintBrushMode.isOn;
+    }
+
+    public bool IsRapidFire()
+    {
+        return rapidFire.isOn;
+    }
+
     public void OnClearPressed()
     {
         Debug.Log("[Clear] - Pressed");
@@ -112,6 +142,38 @@ public class UnitUi : MonoBehaviour
         foreach (var paintObject in GameObject.FindGameObjectsWithTag("PaintObject"))
         {
             Destroy(paintObject);
+        }
+    }
+
+    public void ConfigureAnimationSettings(Puppet puppet)
+    {
+        int selectedOption = animationSelection.value;
+
+        if (animationRandomizeToggle.isOn)
+        {
+            selectedOption = UnityEngine.Random.Range(0, animationSelection.options.Count);
+        }
+
+        switch (animationSelection.options[selectedOption].text)
+        {
+            case "Position":
+                puppet.style = Puppet.MotionStyle.Position;
+                break;
+            case "Rotation":
+                puppet.style = Puppet.MotionStyle.Rotation;
+                break;
+            case "Scale":
+                puppet.style = Puppet.MotionStyle.Scale;
+                break;
+            default:
+                Debug.Log("ERROR: Unknown animation selected");
+                break;
+        }
+
+
+        foreach (Animation animation in puppet.GetComponentsInChildren<Animation>())
+        {
+            animation.speed = animationSlider.value;
         }
     }
 }
