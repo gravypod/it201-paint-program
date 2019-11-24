@@ -18,7 +18,7 @@ public class UnitUi : MonoBehaviour
     }
 
     public Toggle timedDestroyToggle, animationRandomizeToggle, paintBrushMode, rapidFire;
-    public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider, emissionSlider, animationSlider;
+    public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider, emissionSlider, animationSlider, maxDistanceSlider;
 
     public Dropdown animationSelection;
 
@@ -99,6 +99,11 @@ public class UnitUi : MonoBehaviour
         };
     }
 
+    public float MaxDistance()
+    {
+        return maxDistanceSlider.value;
+    }
+    
     public float GetAlpha()
     {
         return alphaSlider.value;

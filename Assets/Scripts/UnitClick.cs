@@ -10,7 +10,6 @@ using Random = UnityEngine.Random;
 public class UnitClick : MonoBehaviour
 {
     private const float TimedDestroyDelay = 3.0f;
-    private const float PaintDrawDistance = 50.0f;
     public GameObject camera;
     public Text mousePositionText;
 
@@ -111,20 +110,20 @@ public class UnitClick : MonoBehaviour
     private void UpdateErase(Ray ray)
     {
         RaycastHit hit;
-        if (!Physics.Raycast(ray, out hit, PaintDrawDistance + 10))
+        if (!Physics.Raycast(ray, out hit, unit.MaxDistance() + 10))
             return;
         Destroy(hit.collider.gameObject);
     }
 
     private void UpdateDraw(Ray ray)
     {
-        var point = ray.GetPoint(PaintDrawDistance);
+        var point = ray.GetPoint(unit.MaxDistance());
 
         if (!unit.IsPaintBrushMode())
         {
             // If we are not in paint brush mode, raytrace and test physical collisions
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, PaintDrawDistance, LayerMask.NameToLayer("UI")))
+            if (Physics.Raycast(ray, out hit, unit.MaxDistance(), LayerMask.NameToLayer("UI")))
             {
                 point = hit.point;
             }
