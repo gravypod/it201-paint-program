@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = System.Object;
@@ -29,46 +30,6 @@ public class UnitClick : MonoBehaviour
         {
             return Input.GetMouseButtonDown(0);
         }
-    }
-
-    private GameObject CreateRandomizedPaintObject(
-        Vector3 point,
-        GameObject template,
-        float alpha, float glow,
-        float minRed, float maxRed,
-        float minGreen, float maxGreen,
-        float minBlue, float maxBlue,
-        float minXScale, float maxXScale,
-        float minYScale, float maxYScale,
-        float minZScale, float maxZScale
-    )
-    {
-        var color = new Color(
-            Random.Range(minRed, maxRed),
-            Random.Range(minGreen, maxGreen),
-            Random.Range(minBlue, maxBlue),
-            alpha
-        );
-        var entity = Instantiate(template, point, Quaternion.identity);
-
-        foreach (MeshRenderer mesh in entity.GetComponentsInChildren<MeshRenderer>())
-        {
-            mesh.material.color = color;
-
-            // Magic from unity forum
-            mesh.material.EnableKeyword("_EMISSION");
-            mesh.material.SetColor("_EmissionColor", new Color(1.0f, 1.0f, 1.0f, 1.0f) * glow);
-        }
-
-
-        var tran = entity.GetComponent<Transform>();
-        tran.localScale = new Vector3(
-            Random.Range(minXScale, maxXScale),
-            Random.Range(minYScale, maxYScale),
-            Random.Range(minZScale, maxZScale)
-        );
-
-        return entity;
     }
 
     // Use this for initialization
@@ -144,7 +105,7 @@ public class UnitClick : MonoBehaviour
         if (unit.IsPaintBrushMode())
         {
             var diff = (Input.mousePosition - mousePosition).normalized;
-            
+
             scaleRange = new[]
             {
                 0.0f, 0.0f, 0.0f
@@ -155,17 +116,19 @@ public class UnitClick : MonoBehaviour
             };
         }
 
-        var paintObject = CreateRandomizedPaintObject(
-            point,
-            unit.GetPaintObjectTemplate(),
-            alpha, glow,
-            0, rgbColorRange[0],
-            0, rgbColorRange[1],
-            0, rgbColorRange[2],
-            minScales[0], scaleRange[0] + minScales[0],
-            minScales[1], scaleRange[1] + minScales[1],
-            minScales[2], scaleRange[2] + minScales[2]
-        );
+        var paintObjectTemplate = unit.GetPaintObjectTemplate();
+        var paintObject = new PaintObjectBuilder(paintObjectTemplate)
+            .SetRedRange(0, rgbColorRange[0])
+            .SetGreenRange(0, rgbColorRange[1])
+            .SetBlueRange(0, rgbColorRange[2])
+            .SetXRange(minScales[0], scaleRange[0] + minScales[0])
+            .SetYRange(minScales[1], scaleRange[1] + minScales[1])
+            .SetZRange(minScales[2], scaleRange[2] + minScales[2])
+            .SetPosition(point)
+            .SetAlpha(alpha)
+            .SetGlow(glow)
+            .Build();
+
 
         var puppet = paintObject.GetComponent<Puppet>();
         if (puppet != null)
