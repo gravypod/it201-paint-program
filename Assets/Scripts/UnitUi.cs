@@ -18,7 +18,15 @@ public class UnitUi : MonoBehaviour
     }
 
     public Toggle timedDestroyToggle, animationRandomizeToggle, paintBrushMode, rapidFire;
-    public Slider redSlider, greenSlider, blueSlider, scaleSlider, alphaSlider, emissionSlider, animationSlider, maxDistanceSlider;
+
+    public Slider redSlider,
+        greenSlider,
+        blueSlider,
+        scaleSlider,
+        alphaSlider,
+        emissionSlider,
+        animationSlider,
+        maxDistanceSlider;
 
     public Dropdown animationSelection;
 
@@ -41,9 +49,38 @@ public class UnitUi : MonoBehaviour
         paintObjectDropdown.options = options;
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        ManageAnimationSelection();
+        ManageObjectSelection();
+    }
+
+    private void ManageAnimationSelection()
+    {
+        string[] keys = {"1", "2", "3"};
+
+        foreach (string key in keys)
+        {
+            if (Input.GetKeyUp(key))
+            {
+                animationSelection.value = Array.IndexOf(keys, key);
+                return;
+            }
+        }
+    }
+
+    private void ManageObjectSelection()
+    {
+        string[] keys = {"4", "5", "6", "7", "8", "9"};
+
+        foreach (string key in keys)
+        {
+            if (Input.GetKeyUp(key))
+            {
+                paintObjectDropdown.value = Array.IndexOf(keys, key);
+                return;
+            }
+        }
     }
 
     /// <summary>
@@ -103,7 +140,7 @@ public class UnitUi : MonoBehaviour
     {
         return maxDistanceSlider.value;
     }
-    
+
     public float GetAlpha()
     {
         return alphaSlider.value;
