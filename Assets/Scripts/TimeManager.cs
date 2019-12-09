@@ -18,6 +18,30 @@ public class TimeManager : MonoBehaviour
         return offset;
     }
 
+    private void ManageTimeHotKeys()
+    {
+        float delta;
+
+        if (Input.GetKey("o"))
+        {
+            delta = -5;
+        }
+        else if (Input.GetKey("p"))
+        {
+            delta = +5;
+        }
+        else
+        {
+            delta = 0;
+        }
+
+        timeSpeedMultiplierSlider.value = Mathf.Clamp(
+            timeSpeedMultiplierSlider.value + delta,
+            timeSpeedMultiplierSlider.minValue,
+            timeSpeedMultiplierSlider.maxValue
+        );
+    }
+
     // Use this for initialization
     void Start()
     {
@@ -27,6 +51,7 @@ public class TimeManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ManageTimeHotKeys();
         int speedMultiplier = (int) timeSpeedMultiplierSlider.value;
         var delta = getTimeSinceLastUpdate();
         for (int i = 0; i < speedMultiplier; i++)
