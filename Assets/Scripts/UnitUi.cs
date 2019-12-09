@@ -19,6 +19,8 @@ public class UnitUi : MonoBehaviour
 
     public Toggle timedDestroyToggle, animationRandomizeToggle, paintBrushMode, rapidFire;
 
+    public Button clearButton;
+
     public Slider redSlider,
         greenSlider,
         blueSlider,
@@ -53,10 +55,29 @@ public class UnitUi : MonoBehaviour
     {
         ManageAnimationSelection();
         ManageObjectSelection();
+        ManageEnablingUiElements();
+    }
+
+    private void ManageEnablingUiElements()
+    {
+        maxDistanceSlider.interactable = true;
+        
+        // If randomizing animations then disable the dropdown.
+        animationSelection.interactable = !animationRandomizeToggle.isOn;
+
+        // If timed destroy is on disable the clear button
+        clearButton.interactable = !timedDestroyToggle.isOn;
+
+        // If paint brush mode is enabled size has no effect.
+        scaleSlider.interactable = !paintBrushMode.isOn;
     }
 
     private void ManageAnimationSelection()
     {
+        // We cannot change animations when randomization is on
+        if (animationRandomizeToggle.isOn)
+            return;
+
         string[] keys = {"1", "2", "3"};
 
         foreach (string key in keys)
