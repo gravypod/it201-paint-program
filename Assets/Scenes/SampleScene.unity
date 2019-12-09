@@ -8211,6 +8211,7 @@ MonoBehaviour:
   animationRandomizeToggle: {fileID: 1628381536}
   paintBrushMode: {fileID: 1923637717}
   rapidFire: {fileID: 311325978}
+  clearButton: {fileID: 2138714338}
   redSlider: {fileID: 585903520}
   greenSlider: {fileID: 2067054203}
   blueSlider: {fileID: 734594019}
@@ -9068,10 +9069,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1371323316}
   m_HandleRect: {fileID: 2024428649}
   m_Direction: 0
-  m_MinValue: 10
+  m_MinValue: 20
   m_MaxValue: 50
   m_WholeNumbers: 0
-  m_Value: 10
+  m_Value: 33.4
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
